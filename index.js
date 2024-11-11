@@ -18,7 +18,8 @@ app.get('/addTask',function(req,res){
     const title = req.query.title
     const description = req.query.description
     const statuss = req.query.statuss
-    const data = {description,statuss}
+    const priority = req.query.priority
+    const data = {description,statuss,priority}
     fs.writeFile(`./uploads/${title}`,JSON.stringify(data,null,2),function(err){
         if (err) throw err
         res.redirect('/')
@@ -29,7 +30,7 @@ app.get('/viewTask/:title',function(req,res){
     fs.readFile(`./uploads/${req.params.title}`,'utf-8',function(err,data){
         if (err) throw err
         const task = JSON.parse(data) 
-        res.send(`description:${task.description} <br> statuss:${task.statuss}`)
+        res.send(`description:${task.description} <br> statuss:${task.statuss} <br> priority:${task.priority}`)
     })
 })
 
@@ -46,7 +47,8 @@ app.get('/edit/:title',function(req,res){
         const task = JSON.parse(data)
         res.render('edit',{title:req.params.title,
             description:task.description,
-            statuss: task.statuss
+            statuss: task.statuss,
+            priority:task.priority
         })
     })
 })
@@ -55,7 +57,8 @@ app.get('/editsval/:oldtitle',function(req,res){
     const title = req.query.title
     const description = req.query.description
     const statuss = req.query.statuss
-    const data = {description,statuss}
+    const priority = req.query.priority
+    const data = {description,statuss,priority}
     fs.rename(`./uploads/${oldtitle}`,`./uploads/${title}`,function(err){
         if (err) throw err
         
